@@ -338,7 +338,8 @@ class ForagingEnv(Env):
         )
 
     def get_valid_actions(self) -> list:
-        return list(product(*[self._valid_actions[player] for player in self.players]))
+        valid_actions = [list(map(lambda x : x.value, self._valid_actions[player])) for player in self.players]
+        return np.array([[1.0 if n in l else 0.0 for n in range(6)] for l in valid_actions])
 
     def _make_obs(self, player):
         return self.Observation(
@@ -459,7 +460,9 @@ class ForagingEnv(Env):
         nreward = [get_player_reward(obs) for obs in observations]
         ndone = [obs.game_over for obs in observations]
         # ninfo = [{'observation': obs} for obs in observations]
-        ninfo = {}
+        ninfo = {
+            'avail_actions':self.get_valid_actions()
+        }
         
         # check the space of obs
         for i, obs in  enumerate(nobs):
@@ -468,7 +471,7 @@ class ForagingEnv(Env):
         
         return nobs, nreward, ndone, ninfo
 
-    def reset(self):
+    def reset(self, return_info=False):
         self.field = np.zeros(self.field_size, np.int32)
         self.spawn_players(self.max_player_level)
         player_levels = sorted([player.level for player in self.players])
@@ -480,7 +483,10 @@ class ForagingEnv(Env):
         self._game_over = False
         self._gen_valid_moves()
 
-        nobs, _, _, _ = self._make_gym_obs()
+        nobs, _, _, ninfo = self._make_gym_obs()
+        if return_info:
+            return nobs, ninfo
+
         return nobs
 
     def step(self, actions):
