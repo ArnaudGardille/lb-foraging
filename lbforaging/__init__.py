@@ -38,5 +38,6 @@ def grid_registration():
                     "max_episode_steps": 50,
                     "force_coop": c,
                     "grid_observation": True,
+                    
                 },
             )

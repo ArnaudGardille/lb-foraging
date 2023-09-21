@@ -5,7 +5,7 @@ import time
 import gym
 import numpy as np
 import lbforaging
-
+from tqdm import trange
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def _game_loop(env, render):
 
         if render:
             env.render()
-            time.sleep(0.5)
+            #time.sleep(0.1)
 
         done = np.all(ndone)
     # print(env.players[0].score, env.players[1].score)
@@ -40,7 +40,7 @@ def main(game_count=1, render=False):
     env = gym.make("Foraging-8x8-2p-2f-v2")
     obs = env.reset()
 
-    for episode in range(game_count):
+    for episode in trange(game_count):
         _game_loop(env, render)
 
 
