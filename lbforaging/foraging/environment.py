@@ -304,7 +304,7 @@ class ForagingEnv(Env):
 
     def _is_valid_action(self, player, action):
         if action == Action.NONE:
-            return True
+            return False
         elif action == Action.NORTH:
             return (
                 player.position[0] > 0
@@ -508,6 +508,9 @@ class ForagingEnv(Env):
                         player.name, player.position, action
                     )
                 )
+                #print("{}{} attempted invalid action {}.".format(
+                #        player.name, player.position, action
+                #    ))
                 actions[i] = Action.NONE
 
         loading_players = set()
