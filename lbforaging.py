@@ -23,7 +23,7 @@ def _game_loop(env, render):
     while not done:
 
         actions = env.action_space.sample()
-        nobs, nreward, ndone, ninfos = env.step(actions)
+        nobs, nreward, ndone, _, ninfos = env.step(actions)
         if sum(nreward) > 0:
             print(nreward)
 
